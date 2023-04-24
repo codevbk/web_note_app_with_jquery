@@ -1,0 +1,8 @@
+{
+    "name": "codevbk/web_note_app_with_jquery",
+    "scripts": {
+        "start-webserver": [
+                "php -S localhost:8000"
+            ]
+    }
+}
