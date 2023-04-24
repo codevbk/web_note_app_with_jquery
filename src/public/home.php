@@ -111,6 +111,14 @@ class NoteView {
 	addNoteItemHandler(callback) {
 		this.noteSaveElement.click(callback);
 	}
+
+	addNoteItemEnterHandler(callback) {
+		this.noteContentElement.keypress(function(event) {
+			if (event.which == 13) {
+				callback();
+			}
+		});
+	}
 }
 
 // Controller
@@ -119,6 +127,7 @@ class NoteController {
 		this.noteModel = noteModel;
 		this.noteView = noteView;
 		this.noteView.addNoteItemHandler(this.addNoteItem.bind(this));
+		this.noteView.addNoteItemEnterHandler(this.addNoteItem.bind(this));
 		this.renderNoteList();
 	}
 
