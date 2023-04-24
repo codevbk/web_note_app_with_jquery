@@ -41,14 +41,13 @@ while(isset(ASSETS_ONLINE_JS[$i])){
 var count = 0;
 function datetime_now(){
     var date = new Date();
-    var dateStr =
-    date.getFullYear() + "-" +("00" + (date.getMonth() + 1)).slice(-2) + "-" +("00" + date.getDate()).slice(-2) + " " +
-    ("00" + date.getHours()).slice(-2) + ":" +
-    ("00" + date.getMinutes()).slice(-2) + ":" +
-    ("00" + date.getSeconds()).slice(-2);
-    return dateStr;
+	var dateStr =
+	date.getFullYear() + "-" +("00" + (date.getMonth() + 1)).slice(-2) + "-" +("00" + date.getDate()).slice(-2) + " " +
+	("00" + date.getHours()).slice(-2) + ":" +
+	("00" + date.getMinutes()).slice(-2) + ":" +
+	("00" + date.getSeconds()).slice(-2);
+	return dateStr;
 }
-//console.log(datetime_now());
 // Model
 class NoteModel {
 	constructor() {
@@ -81,21 +80,24 @@ class NoteView {
 	renderNoteList() {
 		this.noteListElement.empty();
 		var noteList = this.noteModel.getNoteList();
-        for (var i = 0; i < noteList.length; i++) {
-            this.noteListElement.append(
-                '<div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-4" data-id="'+noteList[i][0]+'">\
-                    <div class="card">\
-                    <div class="card-header">\
-                        Note :\
-                    </div>\
-                    <div class="card-body">\
-                        <h5 class="card-title">Note : <span id="note_title"> ' +noteList[i][1]+'</span></h5>\
-                        <p class="card-text" id="note_content">'+noteList[i][2]+'</p>\
-                    </div>\
-                    </div>\
-                </div>'
-            );
+        if(noteList.length > 0){
+            for (var i = 0; i < noteList.length; i++) {
+                this.noteListElement.append(
+                    '<div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-4" data-id="'+noteList[i][0]+'">\
+                        <div class="card">\
+                        <div class="card-header">\
+                            Note :\
+                        </div>\
+                        <div class="card-body">\
+                            <h5 class="card-title">Note : <span id="note_title"> ' +noteList[i][1]+'</span></h5>\
+                            <p class="card-text" id="note_content">'+noteList[i][2]+'</p>\
+                        </div>\
+                        </div>\
+                    </div>'
+                );
+		    }
         }
+
 	}
 
 	getNoteInputValue() {
@@ -126,16 +128,19 @@ class NoteController {
 
 	addNoteItem() {
 		var noteContent = this.noteView.getNoteInputValue();
-        this.noteModel.addNoteItem(null,datetime_now(),noteContent);
-        this.renderNoteList();
-        this.noteView.clearNoteInput();
+        if(noteContent !== ''){
+            this.noteModel.addNoteItem(null,datetime_now(),noteContent);
+		    this.renderNoteList();
+		    this.noteView.clearNoteInput();
+        }else{
+            alert("Please fill required inputs");
+        }
 	}
 }
 
 var noteModel = new NoteModel();
 var noteView = new NoteView(noteModel);
 var noteController = new NoteController(noteModel, noteView);
-
 </script>
 </body>
 </html>
