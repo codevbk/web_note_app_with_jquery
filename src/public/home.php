@@ -48,11 +48,12 @@ function datetime_now(){
     ("00" + date.getSeconds()).slice(-2);
     return dateStr;
 }
+//console.log(datetime_now());
 // Model
 class NoteModel {
 	constructor() {
         this.NoteCount = 0;
-		this.NoteList = [[]];
+		this.NoteList = [];
 	}
 
 	addNoteItem(noteID,noteTitle,NoteContent) {
@@ -81,7 +82,6 @@ class NoteView {
 		this.noteListElement.empty();
 		var noteList = this.noteModel.getNoteList();
         for (var i = 0; i < noteList.length; i++) {
-            console.log(noteList);
             this.noteListElement.append(
                 '<div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-4" data-id="'+noteList[i][0]+'">\
                     <div class="card">\
@@ -135,6 +135,7 @@ class NoteController {
 var noteModel = new NoteModel();
 var noteView = new NoteView(noteModel);
 var noteController = new NoteController(noteModel, noteView);
+
 </script>
 </body>
 </html>
