@@ -38,7 +38,6 @@ while(isset(ASSETS_ONLINE_JS[$i])){
 }
 ?>
 <script>
-var count = 0;
 function datetime_now(){
     var date = new Date();
 	var dateStr =
@@ -52,15 +51,18 @@ function datetime_now(){
 class NoteModel {
 	constructor() {
         this.NoteCount = 0;
+        this.NoteIndex = 0;
 		this.NoteList = [];
 	}
 
 	addNoteItem(noteID,noteTitle,noteContent) {
         this.NoteList.push([]);
-		this.NoteList[this.NoteCount].push(this.NoteCount);
-		this.NoteList[this.NoteCount].push(noteTitle);
-		this.NoteList[this.NoteCount].push(noteContent);
+		this.NoteIndex = parseInt(this.NoteList.length - 1);
+		this.NoteList[this.NoteIndex].push(this.NoteCount);
+		this.NoteList[this.NoteIndex].push(noteTitle);
+		this.NoteList[this.NoteIndex].push(noteContent);
         this.NoteCount++;
+
 	}
 
 	editNoteItem(noteID, noteTitle, noteContent) {
@@ -74,13 +76,11 @@ class NoteModel {
 
 	deleteNoteItem(noteID) {
 		for (var i = 0; i < this.NoteList.length; i++) {
-			console.log("NoteList " + this.NoteList[i][0]);
 			if (this.NoteList[i][0] == noteID) {
 				this.NoteList.splice(i, 1);
 				break;
 			}
 		}
-		console.log(this.NoteList);
 	}
 
 	getNoteList() {
@@ -219,6 +219,7 @@ class NoteController {
 				this.noteView.setNoteContentValue(this.noteModel.getNoteList()[i][2]);
 			}
 		}
+
 		this.renderNoteList();
 	}
 
