@@ -64,9 +64,24 @@ class NoteModel {
 	}
 
 	editNoteItem(noteID, noteTitle, noteContent) {
-    	this.NoteList[noteID][1] = noteTitle;
-    	this.NoteList[noteID][2] = noteContent;
+		for (var i = 0; i < this.NoteList.length; i++) {
+			if (this.NoteList[i][0] == noteID) {
+				this.NoteList[i][1] = noteTitle;
+    			this.NoteList[i][2] = noteContent;
+			}
+		}
   	}
+
+	deleteNoteItem(noteID) {
+		for (var i = 0; i < this.NoteList.length; i++) {
+			console.log("NoteList " + this.NoteList[i][0]);
+			if (this.NoteList[i][0] == noteID) {
+				this.NoteList.splice(i, 1);
+				break;
+			}
+		}
+		console.log(this.NoteList);
+	}
 
 	getNoteList() {
 		return this.NoteList;
@@ -99,6 +114,7 @@ class NoteView {
                             <h5 class="card-title">Note : <span id="note_title"> ' +noteList[i][1]+'</span></h5>\
                             <p class="card-text" id="note_content">'+noteList[i][2]+'</p>\
                             <a href="javascript:;" class="btn btn-primary" id="note_edit"><i class="bi bi-pencil-square"></i></a>\
+							<a href="javascript:;" class="btn btn-primary" id="note_delete"><i class="bi bi-trash"></i></a>\
                         </div>\
                         </div>\
                     </div>'
@@ -146,6 +162,14 @@ class NoteView {
 		});
 	}
 
+	deleteNoteItemHandler(callback) {
+		this.noteListElement.on("click", "#note_delete", function(event) {
+			var noteElement = $(this).parent().parent().parent();
+			var noteID = $(noteElement).attr("data-id");
+			callback(noteID);
+		});
+	}
+
 	addNoteItemEnterHandler(callback) {
 		this.noteContentElement.keypress(function(event) {
 			if (event.which == 13) {
@@ -162,6 +186,7 @@ class NoteController {
 		this.noteView = noteView;
 		this.noteView.addNoteItemHandler(this.addNoteItem.bind(this));
 		this.noteView.editNoteItemHandler(this.editNoteItem.bind(this));
+		this.noteView.deleteNoteItemHandler(this.deleteNoteItem.bind(this));
 		this.noteView.addNoteItemEnterHandler(this.addNoteItem.bind(this));
 		this.renderNoteList();
 	}
@@ -188,8 +213,17 @@ class NoteController {
 
 	editNoteItem(noteID) {
 		this.noteView.setNoteIDValue(noteID);
-		this.noteView.setNoteTitleValue(this.noteModel.getNoteList()[noteID][1]);
-		this.noteView.setNoteContentValue(this.noteModel.getNoteList()[noteID][2]);
+		for (var i = 0; i < this.noteModel.getNoteList().length; i++) {
+			if (this.noteModel.getNoteList()[i][0] == noteID) {
+				this.noteView.setNoteTitleValue(this.noteModel.getNoteList()[i][1]);
+				this.noteView.setNoteContentValue(this.noteModel.getNoteList()[i][2]);
+			}
+		}
+		this.renderNoteList();
+	}
+
+	deleteNoteItem(noteID) {
+		this.noteModel.deleteNoteItem(noteID);
 		this.renderNoteList();
 	}
 }
