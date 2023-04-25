@@ -130,6 +130,8 @@ class NoteView {
 
 	clearNoteInput() {
 		this.noteContentElement.val("");
+		this.noteEditTitleElement.text("");
+		this.noteContentElement.parent().parent().attr("data-id", "");
 	}
 
 	addNoteItemHandler(callback) {
