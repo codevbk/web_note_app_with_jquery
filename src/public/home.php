@@ -63,8 +63,9 @@ class NoteModel {
         this.NoteCount++;
 	}
 
-	editNoteItem(noteID, noteContent) {
-    	this.NoteList[noteID] = noteContent;
+	editNoteItem(noteID, noteTitle, noteContent) {
+    	this.NoteList[noteID][1] = noteTitle;
+    	this.NoteList[noteID][2] = noteContent;
   	}
 
 	getNoteList() {
@@ -107,20 +108,12 @@ class NoteView {
 
 	}
 
-	getNoteInputValue() {
+	getNoteContentValue() {
 		return this.noteContentElement.val();
 	}
 
 	getNoteIDValue() {
 		return this.noteContentElement.parent().parent().attr("data-id");
-	}
-
-	getNoteItemInputValue() {
-		return this.noteEditElement.val();
-	}
-
-	getNoteItemIDValue() {
-		return this.noteEditElement.parent().parent().attr("data-id");
 	}
 
 	setNoteTitleValue(value) {
@@ -176,10 +169,15 @@ class NoteController {
 	}
 
 	addNoteItem() {
-		var noteContent = this.noteView.getNoteInputValue();
+		var noteContent = this.noteView.getNoteContentValue();
+		var noteID = this.noteView.getNoteIDValue();
         if(noteContent !== ''){
-            this.noteModel.addNoteItem(null,datetime_now(),noteContent);
-		    this.renderNoteList();
+			if(noteID !== ''){
+				this.noteModel.editNoteItem(noteID,datetime_now(),noteContent);
+			}else{
+				this.noteModel.addNoteItem(null,datetime_now(),noteContent);
+			}
+            this.renderNoteList();
 		    this.noteView.clearNoteInput();
         }else{
             alert("Please fill required inputs");
