@@ -55,13 +55,17 @@ class NoteModel {
 		this.NoteList = [];
 	}
 
-	addNoteItem(noteID,noteTitle,NoteContent) {
+	addNoteItem(noteID,noteTitle,noteContent) {
         this.NoteList.push([]);
 		this.NoteList[this.NoteCount].push(this.NoteCount);
 		this.NoteList[this.NoteCount].push(noteTitle);
-		this.NoteList[this.NoteCount].push(NoteContent);
+		this.NoteList[this.NoteCount].push(noteContent);
         this.NoteCount++;
 	}
+
+	editNoteItem(noteID, noteContent) {
+    	this.NoteList[noteID] = noteContent;
+  	}
 
 	getNoteList() {
 		return this.NoteList;
@@ -74,6 +78,8 @@ class NoteView {
 		this.noteModel = noteModel;
 		this.noteListElement = $("#note_list");
 		this.noteContentElement = $("#note_edit_content");
+		this.noteEditTitleElement = $("#note_edit_title");
+		this.noteEditElement = $("#note_edit");
 		this.noteSaveElement = $("#note_save");
 	}
 
@@ -91,6 +97,7 @@ class NoteView {
                         <div class="card-body">\
                             <h5 class="card-title">Note : <span id="note_title"> ' +noteList[i][1]+'</span></h5>\
                             <p class="card-text" id="note_content">'+noteList[i][2]+'</p>\
+                            <a href="javascript:;" class="btn btn-primary" id="note_edit"><i class="bi bi-pencil-square"></i></a>\
                         </div>\
                         </div>\
                     </div>'
@@ -104,12 +111,44 @@ class NoteView {
 		return this.noteContentElement.val();
 	}
 
+	getNoteIDValue() {
+		return this.noteContentElement.parent().parent().attr("data-id");
+	}
+
+	getNoteItemInputValue() {
+		return this.noteEditElement.val();
+	}
+
+	getNoteItemIDValue() {
+		return this.noteEditElement.parent().parent().attr("data-id");
+	}
+
+	setNoteTitleValue(value) {
+		return this.noteEditTitleElement.text(value);
+	}
+
+	setNoteContentValue(value) {
+		return this.noteContentElement.val(value);
+	}
+
+	setNoteIDValue(value) {
+		return this.noteContentElement.parent().parent().attr("data-id",value);
+	}
+
 	clearNoteInput() {
 		this.noteContentElement.val("");
 	}
 
 	addNoteItemHandler(callback) {
 		this.noteSaveElement.click(callback);
+	}
+
+	editNoteItemHandler(callback) {
+		this.noteListElement.on("click", "#note_edit", function(event) {
+			var noteElement = $(this).parent().parent().parent();
+			var noteID = $(noteElement).attr("data-id");
+			callback(noteID);
+		});
 	}
 
 	addNoteItemEnterHandler(callback) {
@@ -127,6 +166,7 @@ class NoteController {
 		this.noteModel = noteModel;
 		this.noteView = noteView;
 		this.noteView.addNoteItemHandler(this.addNoteItem.bind(this));
+		this.noteView.editNoteItemHandler(this.editNoteItem.bind(this));
 		this.noteView.addNoteItemEnterHandler(this.addNoteItem.bind(this));
 		this.renderNoteList();
 	}
@@ -144,6 +184,13 @@ class NoteController {
         }else{
             alert("Please fill required inputs");
         }
+	}
+
+	editNoteItem(noteID) {
+		this.noteView.setNoteIDValue(noteID);
+		this.noteView.setNoteTitleValue(this.noteModel.getNoteList()[noteID][1]);
+		this.noteView.setNoteContentValue(this.noteModel.getNoteList()[noteID][2]);
+		this.renderNoteList();
 	}
 }
 
