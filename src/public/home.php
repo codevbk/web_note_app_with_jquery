@@ -74,7 +74,6 @@ class NotePrototype extends NoteInterfacePrototype{
   }
 }
 
-
 // Abstract Factory (Builder Interface)
 class NoteAbstractFactory {
 	createModel() {}
@@ -119,33 +118,31 @@ class NoteFactoryDirector {
 class NoteModel {
 	constructor() {
         this.NoteCount = 0;
-        this.NoteIndex = 0;
 		this.NoteList = [];
 	}
 
 	addNoteItem(noteID,noteTitle,noteContent) {
 		var noteObject = {
-			id: noteID,
+			id: this.NoteCount,
 			title: noteTitle,
 			content: noteContent
 		};
         this.NoteList.push(noteObject);
         this.NoteCount++;
-
 	}
 
 	editNoteItem(noteID, noteTitle, noteContent) {
 		for (var i = 0; i < this.NoteList.length; i++) {
-			if (this.NoteList[i][0] == noteID) {
-				this.NoteList[i][1] = noteTitle;
-    			this.NoteList[i][2] = noteContent;
+			if (this.NoteList[i]["id"] == noteID) {
+				this.NoteList[i]["title"] = noteTitle;
+    			this.NoteList[i]["content"] = noteContent;
 			}
 		}
   	}
 
 	deleteNoteItem(noteID) {
 		for (var i = 0; i < this.NoteList.length; i++) {
-			if (this.NoteList[i][0] == noteID) {
+			if (this.NoteList[i]["id"] == noteID) {
 				this.NoteList.splice(i, 1);
 				break;
 			}
@@ -283,9 +280,9 @@ class NoteController {
 	editNoteItem(noteID) {
 		this.noteView.setNoteIDValue(noteID);
 		for (var i = 0; i < this.noteModel.getNoteList().length; i++) {
-			if (this.noteModel.getNoteList()[i][0] == noteID) {
-				this.noteView.setNoteTitleValue(this.noteModel.getNoteList()[i][1]);
-				this.noteView.setNoteContentValue(this.noteModel.getNoteList()[i][2]);
+			if (this.noteModel.getNoteList()[i]["id"] == noteID) {
+				this.noteView.setNoteTitleValue(this.noteModel.getNoteList()[i]["title"]);
+				this.noteView.setNoteContentValue(this.noteModel.getNoteList()[i]["content"]);
 			}
 		}
 
