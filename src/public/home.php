@@ -48,6 +48,28 @@ function datetime_now(){
 	return dateStr;
 }
 
+// Prototype Class
+class NoteInterfacePrototype {
+  clone() {}
+}
+
+// Concrete Prototype Class
+class NotePrototype extends NoteInterfacePrototype {
+  constructor(noteModel, noteView, noteController) {
+    super();
+    this.noteModel = noteModel;
+    this.noteView = noteView;
+    this.noteController = noteController;
+  }
+
+  clone() {
+    var clonedModel = Object.create(this.noteModel);
+    var clonedView = Object.create(this.noteView);
+    var clonedController = Object.create(this.noteController);
+    return new NotePrototype(clonedModel, clonedView, clonedController);
+  }
+}
+
 // Abstract Factory (Builder Interface)
 class NoteAbstractFactory {
 	createModel() {}
@@ -273,6 +295,15 @@ class NoteController {
 var noteFactory = new NoteFactory();
 var noteFactoryDirector = new NoteFactoryDirector(noteFactory);
 var note = noteFactoryDirector.construct();
+
+var notePrototype = new NotePrototype(
+note.model,
+note.view,
+note.controller
+);
+
+// Cloning Prototype
+var clonedNotePrototype = notePrototype.clone();
 </script>
 </body>
 </html>
