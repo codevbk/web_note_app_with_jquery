@@ -48,14 +48,14 @@ function datetime_now(){
 	return dateStr;
 }
 
-// Abstract Factory
+// Abstract Factory (Builder Interface)
 class NoteAbstractFactory {
 	createModel() {}
-	createView() {}
+	createView(model) {}
 	createController(model, view) {}
 }
 
-// Concrete Factory Method
+// Concrete Factory Method (Builder)
 class NoteFactory extends NoteAbstractFactory {
 	createModel() {
 		return new NoteModel();
@@ -67,6 +67,24 @@ class NoteFactory extends NoteAbstractFactory {
 
 	createController(model, view) {
 		return new NoteController(model, view);
+	}
+}
+
+// Director Class
+class NoteFactoryDirector {
+	constructor(builder) {
+		this.builder = builder;
+	}
+
+	construct() {
+		var noteModel = this.builder.createModel();
+		var noteView = this.builder.createView(noteModel);
+		var noteController = this.builder.createController(noteModel, noteView);
+		return {
+		model: noteModel,
+		view: noteView,
+		controller: noteController
+		};
 	}
 }
 
@@ -253,9 +271,8 @@ class NoteController {
 }
 
 var noteFactory = new NoteFactory();
-var noteModel = noteFactory.createModel();
-var noteView = noteFactory.createView(noteModel);
-var noteController = noteFactory.createController(noteModel, noteView);
+var noteFactoryDirector = new NoteFactoryDirector(noteFactory);
+var note = noteFactoryDirector.construct();
 </script>
 </body>
 </html>
