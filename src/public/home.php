@@ -117,18 +117,18 @@ class NoteFactoryDirector {
 // Model
 class NoteModel {
 	constructor() {
-        this.NoteCount = 0;
+        this.NoteID = 1;
 		this.NoteList = [];
 	}
 
 	addNoteItem(noteID,noteTitle,noteContent) {
 		var noteObject = {
-			id: this.NoteCount,
+			id: this.NoteID,
 			title: noteTitle,
 			content: noteContent
 		};
         this.NoteList.push(noteObject);
-        this.NoteCount++;
+        this.NoteID++;
 	}
 
 	editNoteItem(noteID, noteTitle, noteContent) {
