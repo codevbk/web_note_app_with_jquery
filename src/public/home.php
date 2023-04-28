@@ -47,6 +47,20 @@ function datetime_now(){
 	("00" + date.getSeconds()).slice(-2);
 	return dateStr;
 }
+
+// Factory Method
+class NoteFactory {
+	constructor() {
+		this.noteModel = new NoteModel();
+		this.noteView = new NoteView(this.noteModel);
+		this.noteController = new NoteController(this.noteModel, this.noteView);
+	}
+
+	getNoteController() {
+		return this.noteController;
+	}
+}
+
 // Model
 class NoteModel {
 	constructor() {
@@ -228,10 +242,13 @@ class NoteController {
 		this.renderNoteList();
 	}
 }
-
+/*
 var noteModel = new NoteModel();
 var noteView = new NoteView(noteModel);
 var noteController = new NoteController(noteModel, noteView);
+*/
+var noteFactory = new NoteFactory();
+var noteController = noteFactory.getNoteController();
 </script>
 </body>
 </html>
