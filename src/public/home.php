@@ -53,13 +53,17 @@ class NoteInterfacePrototype {
   clone() {}
 }
 
-// Concrete Prototype Class
-class NotePrototype extends NoteInterfacePrototype {
+// Concrete Prototype Singleton Class
+class NotePrototype extends NoteInterfacePrototype{
   constructor(noteModel, noteView, noteController) {
-    super();
+    if (NotePrototype.instance instanceof NotePrototype) {
+      return NotePrototype.instance;
+    }
+	super();
     this.noteModel = noteModel;
     this.noteView = noteView;
     this.noteController = noteController;
+    NotePrototype.instance = this;
   }
 
   clone() {
@@ -69,6 +73,7 @@ class NotePrototype extends NoteInterfacePrototype {
     return new NotePrototype(clonedModel, clonedView, clonedController);
   }
 }
+
 
 // Abstract Factory (Builder Interface)
 class NoteAbstractFactory {
@@ -296,6 +301,7 @@ var noteFactory = new NoteFactory();
 var noteFactoryDirector = new NoteFactoryDirector(noteFactory);
 var note = noteFactoryDirector.construct();
 
+// Singleton Prototype Class
 var notePrototype = new NotePrototype(
 note.model,
 note.view,
