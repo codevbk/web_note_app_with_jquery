@@ -124,11 +124,12 @@ class NoteModel {
 	}
 
 	addNoteItem(noteID,noteTitle,noteContent) {
-        this.NoteList.push([]);
-		this.NoteIndex = parseInt(this.NoteList.length - 1);
-		this.NoteList[this.NoteIndex].push(this.NoteCount);
-		this.NoteList[this.NoteIndex].push(noteTitle);
-		this.NoteList[this.NoteIndex].push(noteContent);
+		var noteObject = {
+			id: noteID,
+			title: noteTitle,
+			content: noteContent
+		};
+        this.NoteList.push(noteObject);
         this.NoteCount++;
 
 	}
@@ -173,14 +174,14 @@ class NoteView {
         if(noteList.length > 0){
             for (var i = 0; i < noteList.length; i++) {
                 this.noteListElement.append(
-                    '<div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-4" data-id="'+noteList[i][0]+'">\
+                    '<div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-4" data-id="'+noteList[i]["id"]+'">\
                         <div class="card">\
                         <div class="card-header">\
                             Note :\
                         </div>\
                         <div class="card-body">\
-                            <h5 class="card-title">Note : <span id="note_title"> ' +noteList[i][1]+'</span></h5>\
-                            <p class="card-text" id="note_content">'+noteList[i][2]+'</p>\
+                            <h5 class="card-title">Note : <span id="note_title"> ' +noteList[i]["title"]+'</span></h5>\
+                            <p class="card-text" id="note_content">'+noteList[i]["content"]+'</p>\
                             <a href="javascript:;" class="btn btn-primary" id="note_edit"><i class="bi bi-pencil-square"></i></a>\
 							<a href="javascript:;" class="btn btn-primary" id="note_delete"><i class="bi bi-trash"></i></a>\
                         </div>\
